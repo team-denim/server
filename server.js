@@ -16,10 +16,18 @@ app.use(express.static('public'));
 // connect to the database
 const client = require('./db-client');
 
-app.get('/api/users', (req, res) => {
+app.get('/api/advice', (req, res) => {
 
   client.query(`
-    SELECT * FROM users;
+  SELECT a.id, a.title, a.text, a.user_id,
+    COUNT(votes.id) AS upvotes
+  FROM advice a
+
+  LEFT JOIN votes
+    ON votes.table_id = 1 AND a.id = votes.post_id
+  GROUP BY a.id
+  ORDER BY upvotes DESC
+
   `).then(result => {
     res.send(result.rows);
   });
