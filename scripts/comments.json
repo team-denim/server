@@ -1,0 +1,14 @@
+[
+  {
+    "userID": 2,
+    "tableID": 1,
+    "postID": 1,
+    "text": "Yes, sleep is important."
+  },
+  {
+    "userID": 1,
+    "tableID": 1,
+    "postID": 2,
+    "text": "luv it"
+  }
+]

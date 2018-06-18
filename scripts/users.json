@@ -1,0 +1,22 @@
+[
+  {
+    "firstName": "Arthur",
+    "lastName": "Jen",
+    "email": "arthurljen@gmail.com",
+    "password": "password",
+    "linkedin": "https://www.linkedin.com/in/arthurjen/"
+  },
+  {
+    "firstName": "Easton",
+    "lastName": "Gorishek",
+    "email": "ieaston26@gmail.com",
+    "password": "password",
+    "linkedin": "https://www.linkedin.com/in/easton-gorishek/"
+  },
+  {
+    "firstName": "Lewis",
+    "lastName": "Doggo",
+    "email": "bark@gmail.com",
+    "password": "woof"
+  }
+]
