@@ -16,7 +16,7 @@ app.use(express.static('public'));
 // connect to the database
 const client = require('./db-client');
 
-app.get('/api/advice', (req, res) => {
+app.get('/api/advice', (req, res, next) => {
 
   client.query(`
     SELECT
@@ -37,7 +37,43 @@ app.get('/api/advice', (req, res) => {
 
   `).then(result => {
     res.send(result.rows);
-  });
+  })
+    .catch(next);
+});
+
+app.get('/api/resources', (req, res, next) => {
+
+  client.query(`
+    SELECT
+      r.id,
+      r.title,
+      r.description,
+      r.url,
+      r.user_id,
+      u.first_name,
+      u.last_name,
+      COUNT(v.id) AS upvotes
+    FROM resources r
+    JOIN users u
+      ON u.id = r.user_id
+    LEFT JOIN votes v
+      ON v.table_id = 2 AND r.id = v.post_id
+    GROUP BY r.id, u.first_name, u.last_name
+    ORDER BY upvotes DESC;
+
+  `).then(result => {
+    res.send(result.rows);
+  })
+    .catch(next);
+});
+
+// eslint-disable-next-line
+app.use((err, req, res, next) => {
+  console.log('****SERVER ERROR****\n', err);
+  let message = 'internal server error';
+  if(err.message) message = err.message;
+  else if(typeof err === 'string') message = err;
+  res.status(500).send({ message });
 });
 
 const PORT = process.env.PORT;

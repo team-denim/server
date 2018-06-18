@@ -27,6 +27,14 @@ client.query(`
       title VARCHAR(256) NOT NULL,
       text VARCHAR(1024) NOT NULL
     );
+    
+    CREATE TABLE IF NOT EXISTS resources (
+      id SERIAL PRIMARY KEY,
+      user_id INTEGER NOT NULL REFERENCES users(id),
+      title VARCHAR(256) NOT NULL,
+      description VARCHAR(1024) NOT NULL,
+      url VARCHAR(256) NOT NULL
+    );
 
     CREATE TABLE IF NOT EXISTS votes (
       id SERIAL PRIMARY KEY,

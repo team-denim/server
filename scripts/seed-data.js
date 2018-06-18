@@ -3,6 +3,7 @@ const client = require('../db-client');
 const users = require('./users.json');
 const tables = require('./tables.json');
 const advice = require('./advice.json');
+const resources = require('./resources.json');
 const votes = require('./votes.json');
 const comments = require('./comments.json');
 const saved = require('./saved.json');
@@ -48,6 +49,23 @@ Promise.all(
             VALUES ($1, $2, $3);
         `,
         [a.userID, a.title, a.text]
+        ).then(result => result.rows[0]);
+      })
+    );
+  })
+  .then(() => {
+    return Promise.all(
+      resources.map(resource => {
+        return client.query(`
+            INSERT INTO resources (
+              user_id, 
+              title, 
+              description,
+              url
+            )
+            VALUES ($1, $2, $3, $4);
+        `,
+        [resource.userID, resource.title, resource.description, resource.url]
         ).then(result => result.rows[0]);
       })
     );
