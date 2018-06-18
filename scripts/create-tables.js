@@ -18,7 +18,7 @@ client.query(`
 
     CREATE TABLE IF NOT EXISTS humor (
       id SERIAL PRIMARY KEY,
-      image_url VARCHAR(512) NOT NULL
+      url VARCHAR(512) NOT NULL
     );
 
     CREATE TABLE IF NOT EXISTS advice (
@@ -34,6 +34,16 @@ client.query(`
       title VARCHAR(256) NOT NULL,
       description VARCHAR(1024) NOT NULL,
       url VARCHAR(256) NOT NULL
+    );
+
+    CREATE TABLE IF NOT EXISTS workspaces (
+      id SERIAL PRIMARY KEY,
+      user_id INTEGER NOT NULL REFERENCES users(id),
+      title VARCHAR(256) NOT NULL,
+      workspace_type VARCHAR(256) NOT NULL,
+      address VARCHAR(256) NOT NULL,
+      description VARCHAR(1024),
+      url VARCHAR(256)
     );
 
     CREATE TABLE IF NOT EXISTS votes (

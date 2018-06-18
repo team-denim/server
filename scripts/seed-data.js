@@ -4,6 +4,8 @@ const users = require('./users.json');
 const tables = require('./tables.json');
 const advice = require('./advice.json');
 const resources = require('./resources.json');
+const humor = require('./humor.json');
+const workspaces = require('./workspaces.json');
 const votes = require('./votes.json');
 const comments = require('./comments.json');
 const saved = require('./saved.json');
@@ -66,6 +68,39 @@ Promise.all(
             VALUES ($1, $2, $3, $4);
         `,
         [resource.userID, resource.title, resource.description, resource.url]
+        ).then(result => result.rows[0]);
+      })
+    );
+  })
+  .then(() => {
+    return Promise.all(
+      humor.map(image => {
+        return client.query(`
+            INSERT INTO humor (
+              url
+            )
+            VALUES ($1);
+        `,
+        [image.url]
+        ).then(result => result.rows[0]);
+      })
+    );
+  })
+  .then(() => {
+    return Promise.all(
+      workspaces.map(w => {
+        return client.query(`
+            INSERT INTO workspaces (
+              user_id, 
+              title, 
+              workspace_type,
+              address,
+              description,
+              url
+            )
+            VALUES ($1, $2, $3, $4, $5, $6);
+        `,
+        [w.userID, w.title, w.workspaceType, w.address, w.description, w.url]
         ).then(result => result.rows[0]);
       })
     );

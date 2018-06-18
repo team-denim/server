@@ -16,6 +16,20 @@ app.use(express.static('public'));
 // connect to the database
 const client = require('./db-client');
 
+app.get('/api/humor', (req, res, next) => {
+
+  client.query(`
+    SELECT * FROM humor;
+  `).then(result => {
+    res.send(result.rows);
+  })
+    .catch(next);
+});
+
+
+
+//ADVICE
+
 app.get('/api/advice', (req, res, next) => {
 
   client.query(`
@@ -40,6 +54,11 @@ app.get('/api/advice', (req, res, next) => {
   })
     .catch(next);
 });
+
+
+
+
+// RESOURCES
 
 app.get('/api/resources', (req, res, next) => {
 
@@ -66,6 +85,46 @@ app.get('/api/resources', (req, res, next) => {
   })
     .catch(next);
 });
+
+
+
+
+// WORKSPACES
+
+app.get('/api/workspaces', (req, res, next) => {
+
+  client.query(`
+    SELECT
+      w.id,
+      w.title,
+      w.workspace_type,
+      w.address,
+      w.description,
+      w.url,
+      w.user_id,
+      u.first_name,
+      u.last_name,
+      COUNT(v.id) AS upvotes
+    FROM workspaces w
+    JOIN users u
+      ON u.id = w.user_id
+    LEFT JOIN votes v
+      ON v.table_id = 3 AND w.id = v.post_id
+    GROUP BY w.id, u.first_name, u.last_name
+    ORDER BY upvotes DESC;
+
+  `).then(result => {
+    res.send(result.rows);
+  })
+    .catch(next);
+});
+
+
+
+
+
+
+
 
 // eslint-disable-next-line
 app.use((err, req, res, next) => {
