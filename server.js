@@ -193,7 +193,7 @@ app.post('/api/advice', (req, res, next) => {
   client.query(`
     INSERT INTO advice (author_id, title, text)
     VALUES ($1, $2, $3)
-    RETURNING *, author_id as "authorID";
+    RETURNING *, author_id AS "authorID";
   `,
   [body.authorID, body.title, body.text])
     .then(result => {
@@ -210,7 +210,7 @@ app.put('/api/advice/:id', (req, res, next) => {
       title = $1,
       text = $2
     WHERE id = $3
-    RETURNING *, author_id as "authorID";
+    RETURNING *, author_id AS "authorID";
   `,
   [body.title, body.text, req.params.id])
     .then(result => {
@@ -267,6 +267,50 @@ app.get('/api/resources', (req, res, next) => {
     .catch(next);
 });
 
+app.post('/api/resources', (req, res, next) => {
+  const body = req.body;
+  client.query(`
+    INSERT INTO resources (author_id, category_id, title, description, url)
+    VALUES ($1, $2, $3, $4, $5)
+    RETURNING *, author_id AS "authorID", category_id AS "categoryID";
+  `,
+  [body.authorID, body.categoryID, body.title, body.description, body.url])
+    .then(result => {
+      res.send(result.rows[0]);
+    })
+    .catch(next);
+});
+
+app.put('/api/resources/:id', (req, res, next) => {
+  const body = req.body;
+  client.query(`
+    UPDATE resources
+    SET
+      title = $1,
+      description = $2,
+      category_id = $3,
+      url = $4
+    WHERE id = $5
+    RETURNING *, author_id AS "authorID", category_id AS "categoryID";
+  `,
+  [body.title, body.description, body.categoryID, body.url, req.params.id])
+    .then(result => {
+      res.send(result.rows[0]);
+    })
+    .catch(next);
+});
+
+app.delete('/api/resources/:id', (req, res, next) => {
+  client.query(`
+    DELETE FROM resources
+    WHERE id = $1
+  `,
+  [req.params.id])
+    .then(() => {
+      res.send({ deleted: true });
+    })
+    .catch(next);
+});
 
 
 
@@ -301,6 +345,54 @@ app.get('/api/workspaces', (req, res, next) => {
   })
     .catch(next);
 });
+
+app.post('/api/workspaces', (req, res, next) => {
+  const body = req.body;
+  client.query(`
+    INSERT INTO workspaces (author_id, title, workspace_type, address, description, url)
+    VALUES ($1, $2, $3, $4, $5, $6)
+    RETURNING *, author_id AS "authorID", workspace_type AS "workspaceType";
+  `,
+  [body.authorID, body.title, body.workspaceType, body.address, body.description, body.url])
+    .then(result => {
+      res.send(result.rows[0]);
+    })
+    .catch(next);
+});
+
+app.put('/api/workspaces/:id', (req, res, next) => {
+  const body = req.body;
+  client.query(`
+    UPDATE workspaces
+    SET
+      title = $1,
+      workspace_type = $2,
+      address = $3,
+      description = $4,
+      url = $5
+    WHERE id = $6
+    RETURNING *, author_id AS "authorID", workspace_type AS "workspaceType";
+  `,
+  [body.title, body.workspaceType, body.address, body.description, body.url, req.params.id])
+    .then(result => {
+      res.send(result.rows[0]);
+    })
+    .catch(next);
+});
+
+app.delete('/api/workspaces/:id', (req, res, next) => {
+  client.query(`
+    DELETE FROM workspaces
+    WHERE id = $1
+  `,
+  [req.params.id])
+    .then(() => {
+      res.send({ deleted: true });
+    })
+    .catch(next);
+});
+
+
 
 
 
