@@ -16,6 +16,56 @@ app.use(express.static('public'));
 // connect to the database
 const client = require('./db-client');
 
+
+
+// USERS
+
+app.post('/api/auth/signup', (req, res, next) => {
+  const body = req.body;
+  const email = body.email;
+  const password = body.password;
+  console.log(body.firstName);
+  if(!email || !password) {
+    next('email and password are required');
+  }
+
+  client.query(`
+    SELECT count(*) FROM users WHERE email = $1
+  `,
+  [email])
+    .then(results => {
+      if(results.rows[0].count > 0) {
+        throw new Error('Email already exists');
+      }
+
+      return client.query(`
+      INSERT INTO users (first_name, last_name, email, password)
+      VALUES ($1, $2, $3, $4)
+      RETURNING id, first_name, last_name, email
+      `,
+      [body.firstName, body.lastName, email, password]);
+    })
+    .then(results => {
+      const row = results.rows[0];
+      res.send({
+        id: row.id,
+        firstName: row.first_name,
+        lastName: row.last_name,
+        email: row.email
+      });
+    })
+    .catch(next);
+});
+
+
+
+
+
+
+
+
+// HUMOR
+
 app.get('/api/humor', (req, res, next) => {
 
   client.query(`
@@ -25,6 +75,7 @@ app.get('/api/humor', (req, res, next) => {
   })
     .catch(next);
 });
+
 
 
 
