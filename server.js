@@ -37,7 +37,7 @@ app.get('/api/advice', (req, res, next) => {
       a.id,
       a.title,
       a.text,
-      a.user_id AS auth_id,
+      a.user_id AS author_id,
       u.first_name,
       u.last_name,
       COUNT(v.id) AS upvotes
@@ -68,7 +68,7 @@ app.get('/api/resources', (req, res, next) => {
       r.title,
       r.description,
       r.url,
-      r.user_id AS auth_id,
+      r.user_id AS author_id,
       u.first_name,
       u.last_name,
       COUNT(v.id) AS upvotes
@@ -102,7 +102,7 @@ app.get('/api/resources/:id', (req, res, next) => {
       r.title,
       r.description,
       r.url,
-      r.user_id AS auth_id,
+      r.user_id AS author_id,
       r.category_id,
       u.first_name,
       u.last_name,
@@ -144,7 +144,7 @@ app.get('/api/workspaces', (req, res, next) => {
       w.address,
       w.description,
       w.url,
-      w.user_id AS auth_id,
+      w.user_id AS author_id,
       u.first_name,
       u.last_name,
       COUNT(v.id) AS upvotes
