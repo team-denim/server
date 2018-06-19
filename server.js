@@ -30,7 +30,7 @@ app.post('/api/auth/signup', (req, res, next) => {
   }
 
   client.query(`
-    SELECT count(*) FROM users WHERE email = $1
+    SELECT count(*) FROM users WHERE email = $1;
   `,
   [email])
     .then(results => {
@@ -41,7 +41,7 @@ app.post('/api/auth/signup', (req, res, next) => {
       return client.query(`
       INSERT INTO users (first_name, last_name, email, password)
       VALUES ($1, $2, $3, $4)
-      RETURNING id, first_name, last_name, email
+      RETURNING id, first_name, last_name, email;
       `,
       [body.firstName, body.lastName, email, password]);
     })
@@ -75,7 +75,7 @@ app.post('/api/auth/signin', (req, res, next) => {
       first_name,
       last_name
     FROM users
-    WHERE email = $1
+    WHERE email = $1;
   `,
   [email]
   )
@@ -104,7 +104,7 @@ app.get('/api/users/:id', (req, res, next) => {
       github_profile as "githubProfile",
       classwork_repo as "classworkRepo"
     FROM users
-    WHERE id = $1
+    WHERE id = $1;
   `,
   [req.params.id])
     .then (result => {
@@ -132,7 +132,7 @@ app.put('/api/users/:id', (req, res, next) => {
       email,
       linkedin,
       github_profile AS githubProfile,
-      classwork_repo AS classworkRepo
+      classwork_repo AS classworkRepo;
   `,
   [body.firstName, body.lastName, body.email, body.linkedin, body.githubProfile, body.classworkRepo, req.params.id]
   ).then(result => {
@@ -187,6 +187,53 @@ app.get('/api/advice', (req, res, next) => {
   })
     .catch(next);
 });
+
+app.post('/api/advice', (req, res, next) => {
+  const body = req.body;
+  client.query(`
+    INSERT INTO advice (user_id, title, text)
+    VALUES ($1, $2, $3)
+    RETURNING *, user_id as "authorID";
+  `,
+  [body.userID, body.title, body.text])
+    .then(result => {
+      res.send(result.rows[0]);
+    })
+    .catch(next);
+});
+
+app.put('/api/advice/:id', (req, res, next) => {
+  const body = req.body;
+  client.query(`
+    UPDATE advice
+    SET
+      title = $1,
+      text = $2
+    WHERE id = $3
+    RETURNING *;
+  `,
+  [body.title, body.text, req.params.id])
+    .then(result => {
+      res.send(result.rows[0]);
+    })
+    .catch(next);
+});
+
+app.delete('/api/advice/:id', (req, res, next) => {
+  client.query(`
+    DELETE FROM advice
+    WHERE id = $1
+  `,
+  [req.params.id])
+    .then(() => {
+      res.send({ deleted: true });
+    })
+    .catch(next);
+});
+
+
+
+
 
 
 
