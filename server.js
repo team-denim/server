@@ -449,6 +449,81 @@ app.get('/api/saved/workspaces/:id', (req, res, next) => {
 
 
 
+
+
+
+
+// COMMENTS
+
+//GET a count of how many comments on each post for a specific table
+app.get('/api/comments/:id', (req, res, next) => {
+  client.query(`
+    SELECT c.post_id,
+      count(c.post_id) AS "commentCount"
+    FROM comments c
+    WHERE table_id = $1
+    GROUP BY c.post_id;
+  `,
+  [req.params.id])
+    .then(result => {
+      res.send(result.rows);
+    })
+    .catch(next);
+});
+
+
+
+//GET all comments from a specific post from Advice
+app.get('/api/comments/advice/:id', (req, res, next) => {
+
+  client.query(`
+    SELECT 
+      c.id,
+      c.text,
+      c.author_id,
+      u.first_name,
+      u.last_name
+    FROM comments c
+    JOIN users u
+      ON u.id = c.author_id
+    WHERE table_id = 1 AND post_id = $1;
+  `,
+  [req.params.id])
+    .then(result => {
+      res.send(result.rows);
+    })
+    .catch(next);
+});
+
+
+
+app.post('/api/comments', (req, res, next) => {
+  const body = req.body;
+  client.query(`
+    INSERT INTO comments (author_id, table_id, post_id, text)
+    VALUES ($1, $2, $3, $4)
+    RETURNING
+      author_id as "authorID",
+      table_id as "tableID",
+      post_id as "postID",
+      text;
+  `,
+  [body.authorID, body.tableID, body.postID, body.text])
+    .then(result => {
+      res.send(result.rows[0]);
+    })
+    .catch(next);
+});
+
+
+
+
+
+
+
+
+
+
 // eslint-disable-next-line
 app.use((err, req, res, next) => {
   console.log('****SERVER ERROR****\n', err);

@@ -63,7 +63,7 @@ client.query(`
     );
     
     CREATE TABLE IF NOT EXISTS comments (
-      id SERIAL PRIMARY KEY,
+      id SERIAL,
       author_id INTEGER NOT NULL REFERENCES users(id),
       table_id INTEGER NOT NULL REFERENCES tables(id),
       post_id INTEGER NOT NULL,
