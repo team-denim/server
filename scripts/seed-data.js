@@ -48,13 +48,13 @@ Promise.all(
       advice.map(a => {
         return client.query(`
             INSERT INTO advice (
-              user_id, 
+              author_id, 
               title, 
               text
             )
             VALUES ($1, $2, $3);
         `,
-        [a.userID, a.title, a.text]
+        [a.authorID, a.title, a.text]
         ).then(result => result.rows[0]);
       })
     );
@@ -78,7 +78,7 @@ Promise.all(
       resources.map(resource => {
         return client.query(`
             INSERT INTO resources (
-              user_id, 
+              author_id, 
               category_id,
               title, 
               description,
@@ -86,7 +86,7 @@ Promise.all(
             )
             VALUES ($1, $2, $3, $4, $5);
         `,
-        [resource.userID, resource.categoryID, resource.title, resource.description, resource.url]
+        [resource.authorID, resource.categoryID, resource.title, resource.description, resource.url]
         ).then(result => result.rows[0]);
       })
     );
@@ -110,7 +110,7 @@ Promise.all(
       workspaces.map(w => {
         return client.query(`
             INSERT INTO workspaces (
-              user_id, 
+              author_id, 
               title, 
               workspace_type,
               address,
@@ -119,7 +119,7 @@ Promise.all(
             )
             VALUES ($1, $2, $3, $4, $5, $6);
         `,
-        [w.userID, w.title, w.workspaceType, w.address, w.description, w.url]
+        [w.authorID, w.title, w.workspaceType, w.address, w.description, w.url]
         ).then(result => result.rows[0]);
       })
     );
@@ -145,14 +145,14 @@ Promise.all(
       comments.map(comment => {
         return client.query(`
             INSERT INTO comments (
-              user_id, 
+              author_id, 
               table_id,
               post_id,
               text
             )
             VALUES ($1, $2, $3, $4);
         `,
-        [comment.userID, comment.tableID, comment.postID, comment.text]
+        [comment.authorID, comment.tableID, comment.postID, comment.text]
         ).then(result => result.rows[0]);
       })
     );

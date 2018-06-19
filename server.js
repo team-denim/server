@@ -170,13 +170,13 @@ app.get('/api/advice', (req, res, next) => {
       a.id,
       a.title,
       a.text,
-      a.user_id AS "authorID",
+      a.author_id AS "authorID",
       u.first_name AS "firstName",
       u.last_name AS "lastName",
       COUNT(v.id) AS upvotes
     FROM advice a
     JOIN users u
-      ON u.id = a.user_id
+      ON u.id = a.author_id
     LEFT JOIN votes v
       ON v.table_id = 1 AND a.id = v.post_id
     GROUP BY a.id, u.first_name, u.last_name
@@ -191,11 +191,11 @@ app.get('/api/advice', (req, res, next) => {
 app.post('/api/advice', (req, res, next) => {
   const body = req.body;
   client.query(`
-    INSERT INTO advice (user_id, title, text)
+    INSERT INTO advice (author_id, title, text)
     VALUES ($1, $2, $3)
-    RETURNING *, user_id as "authorID";
+    RETURNING *, author_id as "authorID";
   `,
-  [body.userID, body.title, body.text])
+  [body.authorID, body.title, body.text])
     .then(result => {
       res.send(result.rows[0]);
     })
@@ -249,13 +249,13 @@ app.get('/api/resources', (req, res, next) => {
       r.title,
       r.description,
       r.url,
-      r.user_id AS "authorID",
+      r.author_id AS "authorID",
       u.first_name AS "firstName",
       u.last_name AS "lastName",
       COUNT(v.id) AS upvotes
     FROM resources r
     JOIN users u
-      ON u.id = r.user_id
+      ON u.id = r.author_id
     LEFT JOIN votes v
       ON v.table_id = 2 AND r.id = v.post_id
     GROUP BY r.id, u.first_name, u.last_name
@@ -284,13 +284,13 @@ app.get('/api/workspaces', (req, res, next) => {
       w.address,
       w.description,
       w.url,
-      w.user_id AS authorID,
+      w.author_id AS "authorID",
       u.first_name AS "firstName",
       u.last_name AS "lastName",
       COUNT(v.id) AS upvotes
     FROM workspaces w
     JOIN users u
-      ON u.id = w.user_id
+      ON u.id = w.author_id
     LEFT JOIN votes v
       ON v.table_id = 3 AND w.id = v.post_id
     GROUP BY w.id, u.first_name, u.last_name
@@ -314,7 +314,7 @@ app.get('/api/saved/advice/:id', (req, res, next) => {
     SELECT 
       s.id,
       s.user_id AS "userID", 
-      a.user_id AS "authorID",
+      a.author_id AS "authorID",
       a.title,
       a.text, 
       a.first_name AS "firstName", 
@@ -327,13 +327,13 @@ app.get('/api/saved/advice/:id', (req, res, next) => {
       a.id AS advice_id,
       a.title,
       a.text,
-      a.user_id,
+      a.author_id,
       u.first_name,
       u.last_name,
       COUNT(v.id) AS upvotes
       FROM advice a
       JOIN users u
-        ON u.id = a.user_id
+        ON u.id = a.author_id
       LEFT JOIN votes v
         ON v.table_id = 1 AND a.id = v.post_id
       GROUP BY a.id, u.first_name, u.last_name
@@ -358,7 +358,7 @@ app.get('/api/saved/resources/:id', (req, res, next) => {
     SELECT 
       s.id,
       s.user_id AS "userID",
-      r.user_id AS "authorID",
+      r.author_id AS "authorID",
       r.title,
       r.description,
       r.url,
@@ -373,13 +373,13 @@ app.get('/api/saved/resources/:id', (req, res, next) => {
       r.title,
       r.description,
       r.url,
-      r.user_id,
+      r.author_id,
       u.first_name,
       u.last_name,
       COUNT(v.id) AS upvotes
       FROM resources r
       JOIN users u
-        ON u.id = r.user_id
+        ON u.id = r.author_id
       LEFT JOIN votes v
         ON v.table_id = 2 AND r.id = v.post_id
       GROUP BY r.id, u.first_name, u.last_name
@@ -404,7 +404,7 @@ app.get('/api/saved/workspaces/:id', (req, res, next) => {
     SELECT 
       s.id,
       s.user_id AS "userID", 
-      w.user_id AS "authorID",
+      w.author_id AS "authorID",
       w.title,
       w.workspace_type AS "workspaceType",
       w.address,  
@@ -423,13 +423,13 @@ app.get('/api/saved/workspaces/:id', (req, res, next) => {
       w.address,
       w.description,
       w.url,
-      w.user_id,
+      w.author_id,
       u.first_name,
       u.last_name,
       COUNT(v.id) AS upvotes
       FROM workspaces w
       JOIN users u
-        ON u.id = w.user_id
+        ON u.id = w.author_id
       LEFT JOIN votes v
         ON v.table_id = 3 AND w.id = v.post_id
       GROUP BY w.id, u.first_name, u.last_name

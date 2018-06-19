@@ -1,6 +1,6 @@
 [
   {
-    "userID": 2,
+    "authorID": 2,
     "title": "Life of Riley",
     "workspaceType": "Bar",
     "address": "300 NW 10th Ave.",
@@ -8,7 +8,7 @@
     "url": "lifeofriley.com"
   },
   {
-    "userID": 1,
+    "authorID": 1,
     "title": "Nola Doughnuts",
     "workspaceType": "Cafe",
     "address": "110 NW 10th Ave.",

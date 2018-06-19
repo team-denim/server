@@ -1,13 +1,13 @@
 [
   {
-    "userID": 3,
+    "authorID": 3,
     "categoryID": 4,
     "title": "MDN",
     "description": "great resource for documentation",
     "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript"
   },
   {
-    "userID": 1,
+    "authorID": 1,
     "categoryID": 1,
     "title": "CSS Grid",
     "description": "Visual guide to css grid",

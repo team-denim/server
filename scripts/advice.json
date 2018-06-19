@@ -1,11 +1,11 @@
 [
   {
-    "userID": 1,
+    "authorID": 1,
     "title": "SLEEP!",
     "text": "Get a good night's rest."
   },
   {
-    "userID": 2,
+    "authorID": 2,
     "title": "PURE PAIN",
     "text": "It's painful."
   }
