@@ -4,14 +4,18 @@
     "lastName": "Jen",
     "email": "arthurljen@gmail.com",
     "password": "password",
-    "linkedin": "https://www.linkedin.com/in/arthurjen/"
+    "linkedin": "https://www.linkedin.com/in/arthurjen/",
+    "githubProfile": "https://github.com/arthurjen",
+    "classworkRepo": "https://github.com/alchemy-bootcamp-two-spring-2018"
   },
   {
     "firstName": "Easton",
     "lastName": "Gorishek",
     "email": "ieaston26@gmail.com",
     "password": "password",
-    "linkedin": "https://www.linkedin.com/in/easton-gorishek/"
+    "linkedin": "https://www.linkedin.com/in/easton-gorishek/",
+    "githubProfile": "https://github.com/easton-john",
+    "classworkRepo": "https://github.com/alchemy-bootcamp-two-spring-2018"
   },
   {
     "firstName": "Lewis",

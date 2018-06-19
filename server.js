@@ -45,8 +45,8 @@ app.post('/api/auth/signup', (req, res, next) => {
       `,
       [body.firstName, body.lastName, email, password]);
     })
-    .then(results => {
-      const row = results.rows[0];
+    .then(result => {
+      const row = result.rows[0];
       res.send({
         id: row.id,
         firstName: row.first_name,
@@ -79,8 +79,8 @@ app.post('/api/auth/signin', (req, res, next) => {
   `,
   [email]
   )
-    .then(results => {
-      const row = results.rows[0];
+    .then(result => {
+      const row = result.rows[0];
       if(!row || row.password !== password) {
         throw new Error('Invalid email or password');
       }
@@ -94,7 +94,24 @@ app.post('/api/auth/signin', (req, res, next) => {
     .catch(next);    
 });
 
+app.get('/api/users/:id', (req, res, next) => {
 
+  client.query(`
+    SELECT
+      first_name as "firstName",
+      last_name as "lastName",
+      linkedin,
+      github_profile as "githubProfile",
+      classwork_repo as "classworkRepo"
+    FROM users
+    WHERE id = $1
+  `,
+  [req.params.id])
+    .then (result => {
+      res.send(result.rows[0]);
+    })
+    .catch(next);
+});
 
 
 

@@ -8,7 +8,9 @@ client.query(`
       last_name VARCHAR(32) NOT NULL,
       email VARCHAR(64) UNIQUE NOT NULL,
       password VARCHAR(64) NOT NULL,
-      linkedin VARCHAR(128)
+      linkedin VARCHAR(128),
+      github_profile VARCHAR(128),
+      classwork_repo VARCHAR(128)
     );
 
     CREATE TABLE IF NOT EXISTS tables (

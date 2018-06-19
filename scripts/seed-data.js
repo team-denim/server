@@ -19,10 +19,13 @@ Promise.all(
           last_name,
           email,
           password,
-          linkedin)
-        VALUES ($1, $2, $3, $4, $5);
+          linkedin,
+          github_profile,
+          classwork_repo
+        )
+        VALUES ($1, $2, $3, $4, $5, $6, $7);
     `,
-    [user.firstName, user.lastName, user.email, user.password, user.linkedin]
+    [user.firstName, user.lastName, user.email, user.password, user.linkedin, user.githubProfile, user.classworkRepo]
     ).then(result => result.rows[0]);
   })
 )
