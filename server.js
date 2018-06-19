@@ -113,6 +113,34 @@ app.get('/api/users/:id', (req, res, next) => {
     .catch(next);
 });
 
+app.put('/api/users/:id', (req, res, next) => {
+  const body = req.body;
+
+  client.query(`
+    UPDATE users
+    SET
+      first_name = $1,
+      last_name = $2,
+      email = $3,
+      linkedin = $4,
+      github_profile = $5,
+      classwork_repo = $6
+    WHERE id = $7
+    RETURNING 
+      first_name AS firstName,
+      last_name AS lastName,
+      email,
+      linkedin,
+      github_profile AS githubProfile,
+      classwork_repo AS classworkRepo
+  `,
+  [body.firstName, body.lastName, body.email, body.linkedin, body.githubProfile, body.classworkRepo, req.params.id]
+  ).then(result => {
+    res.send(result.rows[0]);
+  })
+    .catch(next);
+});
+
 
 
 
