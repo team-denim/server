@@ -8,5 +8,20 @@
     "userID": 2,
     "tableID": 1,
     "postID": 2
+  },
+  {
+    "userID": 2,
+    "tableID": 3,
+    "postID": 1
+  },
+  {
+    "userID": 2,
+    "tableID": 2,
+    "postID": 2
+  },
+  {
+    "userID": 2,
+    "tableID": 3,
+    "postID": 2
   }
 ]

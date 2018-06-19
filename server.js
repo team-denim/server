@@ -123,6 +123,53 @@ app.get('/api/workspaces', (req, res, next) => {
 
 
 
+// SAVED
+
+
+app.get('/api/saved/:id', (req, res, next) => {
+
+  client.query(`
+    SELECT 
+      s.id, 
+      a.title,
+      a.text, 
+      a.first_name AS firstName, 
+      a.last_name AS lastName,
+      a.upvotes 
+
+    FROM saved s
+    JOIN (SELECT
+      a.id AS advice_id,
+      a.title,
+      a.text,
+      a.user_id AS author_id,
+      u.first_name,
+      u.last_name,
+      COUNT(v.id) AS upvotes
+      FROM advice a
+      JOIN users u
+          ON u.id = a.user_id
+      LEFT JOIN votes v
+          ON v.table_id = 1 AND a.id = v.post_id
+      GROUP BY a.id, u.first_name, u.last_name
+      ORDER BY upvotes DESC
+    ) a
+    
+      ON s.table_id = 1 AND s.post_id = a.advice_id
+
+    WHERE s.user_id = $1;
+
+  `,
+  [req.params.id]
+  ).then(result => {
+    res.send(result.rows);
+  })
+    .catch(next);
+});
+
+
+
+
 
 
 
