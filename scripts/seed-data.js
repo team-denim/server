@@ -9,6 +9,7 @@ const workspaces = require('./workspaces.json');
 const votes = require('./votes.json');
 const comments = require('./comments.json');
 const saved = require('./saved.json');
+const resCategories = require('./resource-categories.json');
 
 Promise.all(
   users.map(user => {
@@ -57,17 +58,32 @@ Promise.all(
   })
   .then(() => {
     return Promise.all(
+      resCategories.map(c => {
+        return client.query(`
+            INSERT INTO resource_categories (
+              category       
+            )
+            VALUES ($1);
+        `,
+        [c.category]
+        ).then(result => result.rows[0]);
+      })
+    );
+  })
+  .then(() => {
+    return Promise.all(
       resources.map(resource => {
         return client.query(`
             INSERT INTO resources (
               user_id, 
+              category_id,
               title, 
               description,
               url
             )
-            VALUES ($1, $2, $3, $4);
+            VALUES ($1, $2, $3, $4, $5);
         `,
-        [resource.userID, resource.title, resource.description, resource.url]
+        [resource.userID, resource.categoryID, resource.title, resource.description, resource.url]
         ).then(result => result.rows[0]);
       })
     );

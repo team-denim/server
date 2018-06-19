@@ -16,11 +16,12 @@ client.query(`
       name VARCHAR(64) NOT NULL
     );
 
+    
     CREATE TABLE IF NOT EXISTS humor (
       id SERIAL PRIMARY KEY,
       url VARCHAR(512) NOT NULL
     );
-
+    
     CREATE TABLE IF NOT EXISTS advice (
       id SERIAL PRIMARY KEY,
       user_id INTEGER NOT NULL REFERENCES users(id),
@@ -28,9 +29,15 @@ client.query(`
       text VARCHAR(1024) NOT NULL
     );
     
+    CREATE TABLE IF NOT EXISTS resource_categories (
+      id SERIAL PRIMARY KEY,
+      category VARCHAR(64) NOT NULL
+    );
+
     CREATE TABLE IF NOT EXISTS resources (
       id SERIAL PRIMARY KEY,
       user_id INTEGER NOT NULL REFERENCES users(id),
+      category_id INTEGER NOT NULL REFERENCES resource_categories(id),
       title VARCHAR(256) NOT NULL,
       description VARCHAR(1024) NOT NULL,
       url VARCHAR(256) NOT NULL
