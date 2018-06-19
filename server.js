@@ -37,7 +37,7 @@ app.get('/api/advice', (req, res, next) => {
       a.id,
       a.title,
       a.text,
-      a.user_id,
+      a.user_id AS author_id,
       u.first_name,
       u.last_name,
       COUNT(v.id) AS upvotes
@@ -68,7 +68,7 @@ app.get('/api/resources', (req, res, next) => {
       r.title,
       r.description,
       r.url,
-      r.user_id,
+      r.user_id AS author_id,
       u.first_name,
       u.last_name,
       COUNT(v.id) AS upvotes
@@ -89,6 +89,49 @@ app.get('/api/resources', (req, res, next) => {
 
 
 
+
+// RESOURCE CATEGORIES
+
+app.get('/api/resources/:id', (req, res, next) => {
+
+  client.query(`
+    SELECT *
+
+    FROM (SELECT
+      r.id,
+      r.title,
+      r.description,
+      r.url,
+      r.user_id AS author_id,
+      r.category_id,
+      u.first_name,
+      u.last_name,
+      COUNT(v.id) AS upvotes
+      FROM resources r
+      JOIN users u
+        ON u.id = r.user_id
+      LEFT JOIN votes v
+        ON v.table_id = 2 AND r.id = v.post_id
+      GROUP BY r.id, u.first_name, u.last_name
+      ORDER BY upvotes DESC
+    ) r
+    
+    JOIN resource_categories
+        ON r.category_id = resource_categories.id
+    
+    WHERE r.category_id = $1;
+
+  `,
+  [req.params.id]
+  ).then(result => {
+    res.send(result.rows);
+  })
+    .catch(next);
+});
+
+
+
+
 // WORKSPACES
 
 app.get('/api/workspaces', (req, res, next) => {
@@ -101,7 +144,7 @@ app.get('/api/workspaces', (req, res, next) => {
       w.address,
       w.description,
       w.url,
-      w.user_id,
+      w.user_id AS author_id,
       u.first_name,
       u.last_name,
       COUNT(v.id) AS upvotes
@@ -125,12 +168,12 @@ app.get('/api/workspaces', (req, res, next) => {
 
 // SAVED
 
-
 app.get('/api/saved/advice/:id', (req, res, next) => {
 
   client.query(`
     SELECT 
-      s.id, 
+      s.id,
+      s.user_id, 
       a.title,
       a.text, 
       a.first_name AS firstName, 
@@ -138,6 +181,7 @@ app.get('/api/saved/advice/:id', (req, res, next) => {
       a.upvotes 
 
     FROM saved s
+    
     JOIN (SELECT
       a.id AS advice_id,
       a.title,
@@ -148,9 +192,9 @@ app.get('/api/saved/advice/:id', (req, res, next) => {
       COUNT(v.id) AS upvotes
       FROM advice a
       JOIN users u
-          ON u.id = a.user_id
+        ON u.id = a.user_id
       LEFT JOIN votes v
-          ON v.table_id = 1 AND a.id = v.post_id
+        ON v.table_id = 1 AND a.id = v.post_id
       GROUP BY a.id, u.first_name, u.last_name
       ORDER BY upvotes DESC
     ) a
@@ -171,36 +215,38 @@ app.get('/api/saved/resources/:id', (req, res, next) => {
 
   client.query(`
     SELECT 
-    s.id, 
-    r.title,
-    r.description,
-    r.url,
-    r.first_name AS firstName, 
-    r.last_name AS lastName,
-    r.upvotes 
+      s.id,
+      s.user_id, 
+      r.title,
+      r.description,
+      r.url,
+      r.first_name AS firstName, 
+      r.last_name AS lastName,
+      r.upvotes 
 
-  FROM saved s
-  JOIN (SELECT
-    r.id AS resource_id,
-    r.title,
-    r.description,
-    r.url,
-    r.user_id,
-    u.first_name,
-    u.last_name,
-    COUNT(v.id) AS upvotes
-    FROM resources r
-    JOIN users u
-      ON u.id = r.user_id
-    LEFT JOIN votes v
-      ON v.table_id = 2 AND r.id = v.post_id
-    GROUP BY r.id, u.first_name, u.last_name
-    ORDER BY upvotes DESC
-  ) r
+    FROM saved s
+  
+    JOIN (SELECT
+      r.id AS resource_id,
+      r.title,
+      r.description,
+      r.url,
+      r.user_id,
+      u.first_name,
+      u.last_name,
+      COUNT(v.id) AS upvotes
+      FROM resources r
+      JOIN users u
+        ON u.id = r.user_id
+      LEFT JOIN votes v
+        ON v.table_id = 2 AND r.id = v.post_id
+      GROUP BY r.id, u.first_name, u.last_name
+      ORDER BY upvotes DESC
+    ) r
+    
+      ON s.table_id = 2 AND s.post_id = r.resource_id
 
-    ON s.table_id = 2 AND s.post_id = r.resource_id
-
-  WHERE s.user_id = $1;
+    WHERE s.user_id = $1;
 
   `,
   [req.params.id]
@@ -214,17 +260,19 @@ app.get('/api/saved/workspaces/:id', (req, res, next) => {
 
   client.query(`
     SELECT 
-      w.id, 
+      s.id,
+      s.user_id, 
       w.title,
-      w.workspace_type,
+      w.workspace_type AS workspaceType,
       w.address,  
       w.description,
       w.url,
       w.first_name AS firstName, 
       w.last_name AS lastName,
       w.upvotes 
-
+    
     FROM saved s
+    
     JOIN (SELECT
       w.id,
       w.title,
@@ -244,9 +292,9 @@ app.get('/api/saved/workspaces/:id', (req, res, next) => {
       GROUP BY w.id, u.first_name, u.last_name
       ORDER BY upvotes DESC
     ) w
-
-      ON s.table_id = 3 AND s.post_id = w.id
-      
+    
+      ON s.table_id = 3 AND s.post_id = w.id 
+    
     WHERE s.user_id = $1
   `,
   [req.params.id]
@@ -255,51 +303,6 @@ app.get('/api/saved/workspaces/:id', (req, res, next) => {
   })
     .catch(next);
 });
-
-app.get('/api/saved/advice/:id', (req, res, next) => {
-
-  client.query(`
-    SELECT 
-      s.id, 
-      a.title,
-      a.text, 
-      a.first_name AS firstName, 
-      a.last_name AS lastName,
-      a.upvotes 
-
-    FROM saved s
-    JOIN (SELECT
-      a.id AS advice_id,
-      a.title,
-      a.text,
-      a.user_id AS author_id,
-      u.first_name,
-      u.last_name,
-      COUNT(v.id) AS upvotes
-      FROM advice a
-      JOIN users u
-          ON u.id = a.user_id
-      LEFT JOIN votes v
-          ON v.table_id = 1 AND a.id = v.post_id
-      GROUP BY a.id, u.first_name, u.last_name
-      ORDER BY upvotes DESC
-    ) a
-    
-      ON s.table_id = 1 AND s.post_id = a.advice_id
-
-    WHERE s.user_id = $1;
-
-  `,
-  [req.params.id]
-  ).then(result => {
-    res.send(result.rows);
-  })
-    .catch(next);
-});
-
-
-
-
 
 
 
