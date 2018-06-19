@@ -37,9 +37,9 @@ app.get('/api/advice', (req, res, next) => {
       a.id,
       a.title,
       a.text,
-      a.user_id AS author_id,
-      u.first_name,
-      u.last_name,
+      a.user_id AS "authorID",
+      u.first_name AS "firstName",
+      u.last_name AS "lastName",
       COUNT(v.id) AS upvotes
     FROM advice a
     JOIN users u
@@ -65,12 +65,13 @@ app.get('/api/resources', (req, res, next) => {
   client.query(`
     SELECT
       r.id,
+      r.category_id AS "categoryID",
       r.title,
       r.description,
       r.url,
-      r.user_id AS author_id,
-      u.first_name,
-      u.last_name,
+      r.user_id AS "authorID",
+      u.first_name AS "firstName",
+      u.last_name AS "lastName",
       COUNT(v.id) AS upvotes
     FROM resources r
     JOIN users u
@@ -90,47 +91,6 @@ app.get('/api/resources', (req, res, next) => {
 
 
 
-// RESOURCE CATEGORIES
-
-app.get('/api/resources/:id', (req, res, next) => {
-
-  client.query(`
-    SELECT *
-
-    FROM (SELECT
-      r.id,
-      r.title,
-      r.description,
-      r.url,
-      r.user_id AS author_id,
-      r.category_id,
-      u.first_name,
-      u.last_name,
-      COUNT(v.id) AS upvotes
-      FROM resources r
-      JOIN users u
-        ON u.id = r.user_id
-      LEFT JOIN votes v
-        ON v.table_id = 2 AND r.id = v.post_id
-      GROUP BY r.id, u.first_name, u.last_name
-      ORDER BY upvotes DESC
-    ) r
-    
-    JOIN resource_categories
-        ON r.category_id = resource_categories.id
-    
-    WHERE r.category_id = $1;
-
-  `,
-  [req.params.id]
-  ).then(result => {
-    res.send(result.rows);
-  })
-    .catch(next);
-});
-
-
-
 
 // WORKSPACES
 
@@ -140,13 +100,13 @@ app.get('/api/workspaces', (req, res, next) => {
     SELECT
       w.id,
       w.title,
-      w.workspace_type,
+      w.workspace_type AS "workspaceType",
       w.address,
       w.description,
       w.url,
-      w.user_id AS author_id,
-      u.first_name,
-      u.last_name,
+      w.user_id AS authorID,
+      u.first_name AS "firstName",
+      u.last_name AS "lastName",
       COUNT(v.id) AS upvotes
     FROM workspaces w
     JOIN users u
@@ -173,11 +133,12 @@ app.get('/api/saved/advice/:id', (req, res, next) => {
   client.query(`
     SELECT 
       s.id,
-      s.user_id, 
+      s.user_id AS "userID", 
+      a.user_id AS "authorID",
       a.title,
       a.text, 
-      a.first_name AS firstName, 
-      a.last_name AS lastName,
+      a.first_name AS "firstName", 
+      a.last_name AS "lastName",
       a.upvotes 
 
     FROM saved s
@@ -186,7 +147,7 @@ app.get('/api/saved/advice/:id', (req, res, next) => {
       a.id AS advice_id,
       a.title,
       a.text,
-      a.user_id AS author_id,
+      a.user_id,
       u.first_name,
       u.last_name,
       COUNT(v.id) AS upvotes
@@ -216,12 +177,13 @@ app.get('/api/saved/resources/:id', (req, res, next) => {
   client.query(`
     SELECT 
       s.id,
-      s.user_id, 
+      s.user_id AS "userID",
+      r.user_id AS "authorID",
       r.title,
       r.description,
       r.url,
-      r.first_name AS firstName, 
-      r.last_name AS lastName,
+      r.first_name AS "firstName", 
+      r.last_name AS "lastName",
       r.upvotes 
 
     FROM saved s
@@ -261,14 +223,15 @@ app.get('/api/saved/workspaces/:id', (req, res, next) => {
   client.query(`
     SELECT 
       s.id,
-      s.user_id, 
+      s.user_id AS "userID", 
+      w.user_id AS "authorID",
       w.title,
-      w.workspace_type AS workspaceType,
+      w.workspace_type AS "workspaceType",
       w.address,  
       w.description,
       w.url,
-      w.first_name AS firstName, 
-      w.last_name AS lastName,
+      w.first_name AS "firstName", 
+      w.last_name AS "lastName",
       w.upvotes 
     
     FROM saved s
