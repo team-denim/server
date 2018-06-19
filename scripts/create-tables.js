@@ -26,7 +26,7 @@ client.query(`
     
     CREATE TABLE IF NOT EXISTS advice (
       id SERIAL PRIMARY KEY,
-      user_id INTEGER NOT NULL REFERENCES users(id),
+      author_id INTEGER NOT NULL REFERENCES users(id),
       title VARCHAR(256) NOT NULL,
       text VARCHAR(1024) NOT NULL
     );
@@ -38,7 +38,7 @@ client.query(`
 
     CREATE TABLE IF NOT EXISTS resources (
       id SERIAL PRIMARY KEY,
-      user_id INTEGER NOT NULL REFERENCES users(id),
+      author_id INTEGER NOT NULL REFERENCES users(id),
       category_id INTEGER NOT NULL REFERENCES resource_categories(id),
       title VARCHAR(256) NOT NULL,
       description VARCHAR(1024) NOT NULL,
@@ -47,7 +47,7 @@ client.query(`
 
     CREATE TABLE IF NOT EXISTS workspaces (
       id SERIAL PRIMARY KEY,
-      user_id INTEGER NOT NULL REFERENCES users(id),
+      author_id INTEGER NOT NULL REFERENCES users(id),
       title VARCHAR(256) NOT NULL,
       workspace_type VARCHAR(256) NOT NULL,
       address VARCHAR(256) NOT NULL,
@@ -64,7 +64,7 @@ client.query(`
     
     CREATE TABLE IF NOT EXISTS comments (
       id SERIAL PRIMARY KEY,
-      user_id INTEGER NOT NULL REFERENCES users(id),
+      author_id INTEGER NOT NULL REFERENCES users(id),
       table_id INTEGER NOT NULL REFERENCES tables(id),
       post_id INTEGER NOT NULL,
       text VARCHAR(512) NOT NULL
