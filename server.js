@@ -210,7 +210,7 @@ app.put('/api/advice/:id', (req, res, next) => {
       title = $1,
       text = $2
     WHERE id = $3
-    RETURNING *;
+    RETURNING *, author_id as "authorID";
   `,
   [body.title, body.text, req.params.id])
     .then(result => {
@@ -495,6 +495,48 @@ app.get('/api/comments/advice/:id', (req, res, next) => {
     .catch(next);
 });
 
+app.get('/api/comments/resources/:id', (req, res, next) => {
+
+  client.query(`
+    SELECT 
+      c.id,
+      c.text,
+      c.author_id,
+      u.first_name,
+      u.last_name
+    FROM comments c
+    JOIN users u
+      ON u.id = c.author_id
+    WHERE table_id = 2 AND post_id = $1;
+  `,
+  [req.params.id])
+    .then(result => {
+      res.send(result.rows);
+    })
+    .catch(next);
+});
+
+app.get('/api/comments/workspaces/:id', (req, res, next) => {
+
+  client.query(`
+    SELECT 
+      c.id,
+      c.text,
+      c.author_id,
+      u.first_name,
+      u.last_name
+    FROM comments c
+    JOIN users u
+      ON u.id = c.author_id
+    WHERE table_id = 3 AND post_id = $1;
+  `,
+  [req.params.id])
+    .then(result => {
+      res.send(result.rows);
+    })
+    .catch(next);
+});
+
 
 
 app.post('/api/comments', (req, res, next) => {
@@ -503,9 +545,9 @@ app.post('/api/comments', (req, res, next) => {
     INSERT INTO comments (author_id, table_id, post_id, text)
     VALUES ($1, $2, $3, $4)
     RETURNING
-      author_id as "authorID",
-      table_id as "tableID",
-      post_id as "postID",
+      author_id AS "authorID",
+      table_id AS "tableID",
+      post_id AS "postID",
       text;
   `,
   [body.authorID, body.tableID, body.postID, body.text])
@@ -515,6 +557,40 @@ app.post('/api/comments', (req, res, next) => {
     .catch(next);
 });
 
+app.put('/api/comments/:id', (req, res, next) => {
+  const body = req.body;
+  client.query(`
+    UPDATE comments 
+    SET
+      text = $1
+    WHERE id = $2
+    RETURNING 
+      id,
+      author_id AS "authorID",
+      table_id AS "tableID",
+      post_id AS "postID",
+      text;    
+  `,
+  [body.text, req.params.id])
+    .then(result => {
+      res.send(result.rows[0]);
+    })
+    .catch(next);
+});
+
+app.delete('/api/comments/:id', (req, res, next) => {
+
+  client.query(`
+    DELETE FROM comments
+
+    WHERE id = $1;
+  `,
+  [req.params.id]
+  ).then(() => {
+    res.send({ removed: true });
+  })
+    .catch(next);
+});
 
 
 
