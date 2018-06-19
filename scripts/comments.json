@@ -10,5 +10,23 @@
     "tableID": 1,
     "postID": 2,
     "text": "luv it"
+  },
+  {
+    "authorID": 3,
+    "tableID": 1,
+    "postID": 2,
+    "text": "woof woof"
+  },
+  {
+    "authorID": 1,
+    "tableID": 1,
+    "postID": 2,
+    "text": "What's that, lewis?"
+  },
+  {
+    "authorID": 2,
+    "tableID": 1,
+    "postID": 2,
+    "text": "Good dog."
   }
 ]
