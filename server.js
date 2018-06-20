@@ -423,6 +423,7 @@ app.get('/api/saved/advice/:id', (req, res, next) => {
     SELECT 
       s.id,
       s.user_id AS "userID", 
+      s.post_id AS "postID",
       a.author_id AS "authorID",
       a.title,
       a.text, 
@@ -467,6 +468,7 @@ app.get('/api/saved/resources/:id', (req, res, next) => {
     SELECT 
       s.id,
       s.user_id AS "userID",
+      s.post_id AS "postID",
       r.author_id AS "authorID",
       r.title,
       r.description,
@@ -513,6 +515,7 @@ app.get('/api/saved/workspaces/:id', (req, res, next) => {
     SELECT 
       s.id,
       s.user_id AS "userID", 
+      s.post_id AS "postID",
       w.author_id AS "authorID",
       w.title,
       w.workspace_type AS "workspaceType",
