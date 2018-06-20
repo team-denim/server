@@ -539,7 +539,19 @@ app.get('/api/saved/workspaces/:id', (req, res, next) => {
     .catch(next);
 });
 
+app.delete('/api/saved/:id', (req, res, next) => {
 
+  client.query(`
+    DELETE FROM saved
+
+    WHERE id = $1;
+  `,
+  [req.params.id]
+  ).then(() => {
+    res.send({ removed: true });
+  })
+    .catch(next);
+});
 
 
 
