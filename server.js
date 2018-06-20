@@ -707,6 +707,7 @@ app.delete('/api/comments/:id', (req, res, next) => {
 
 // VOTES
 
+//GET all upvotes by user, id = user_id
 app.get('/api/votes/:id', (req, res, next) => {
   client.query(`
     SELECT id,
@@ -722,7 +723,7 @@ app.get('/api/votes/:id', (req, res, next) => {
     .catch(next);
 });
 
-
+//POST a record of user's upvote
 app.post('/api/votes', (req, res, next) => {
   const body = req.body;
 
@@ -747,11 +748,11 @@ app.post('/api/votes', (req, res, next) => {
     .catch(next);
 });
 
+//DELETE upvote by vote primary key
 app.delete('/api/votes/:id', (req, res, next) => {
 
   client.query(`
     DELETE FROM votes
-
     WHERE id = $1;
   `,
   [req.params.id]
