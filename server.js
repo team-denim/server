@@ -33,8 +33,8 @@ app.post('/api/auth/signup', (req, res, next) => {
     SELECT count(*) FROM users WHERE email = $1;
   `,
   [email])
-    .then(results => {
-      if(results.rows[0].count > 0) {
+    .then(result => {
+      if(result.rows[0].count > 0) {
         throw new Error('Email already exists');
       }
 
@@ -400,6 +400,23 @@ app.delete('/api/workspaces/:id', (req, res, next) => {
 
 // SAVED
 
+app.post('/api/saved', (req, res, next) => {
+  const body = req.body;
+  client.query(`
+    INSERT INTO saved (user_id, table_id, post_id)
+    VALUES ($1, $2, $3)
+    RETURNING
+      user_id AS "userID",
+      table_id AS "tableID",
+      post_id AS "postID"
+  `,
+  [body.userID, body.tableID, body.postID, body.text])
+    .then(result => {
+      res.send(result.rows[0]);
+    })
+    .catch(next);
+});
+
 app.get('/api/saved/advice/:id', (req, res, next) => {
 
   client.query(`
@@ -686,6 +703,56 @@ app.delete('/api/comments/:id', (req, res, next) => {
 
 
 
+
+
+// VOTE
+
+app.post('/api/votes', (req, res, next) => {
+  const body = req.body;
+  client.query(`
+    SELECT count(*) FROM votes WHERE user_id = $1 AND table_id = $2 AND post_id = $3;
+  `,
+  [body.userID, body.tableID, body.postID])
+    .then(result => {
+      if(result.rows[0].count > 0) {
+        throw new Error('You have already upvoted this post');
+      }
+
+      return client.query(`
+        INSERT INTO votes (user_id, table_id, post_id)
+        VALUES ($1, $2, $3)
+        RETURNING
+          user_id AS "userID",
+          table_id AS "tableID",
+          post_id AS "postID";
+      `,
+      [body.userID, body.tableID, body.postID]);
+    })
+    .then(result => {
+      const row = result.rows[0];
+      res.send({
+        id: row.id,
+        userID: row.userID,
+        tableID: row.tableID,
+        postID: row.postID
+      });
+    })
+    .catch(next);
+});
+
+app.delete('/api/votes/:id', (req, res, next) => {
+
+  client.query(`
+    DELETE FROM votes
+
+    WHERE id = $1;
+  `,
+  [req.params.id]
+  ).then(() => {
+    res.send({ removed: true });
+  })
+    .catch(next);
+});
 
 
 
