@@ -707,6 +707,22 @@ app.delete('/api/comments/:id', (req, res, next) => {
 
 // VOTES
 
+app.get('/api/votes/:id', (req, res, next) => {
+  client.query(`
+    SELECT id,
+      post_id AS "postID",
+      user_id AS "userID"
+    FROM votes
+    WHERE user_id = $1;
+  `,
+  [req.params.id])
+    .then(result => {
+      res.send(result.rows);
+    })
+    .catch(next);
+});
+
+
 app.post('/api/votes', (req, res, next) => {
   const body = req.body;
 
