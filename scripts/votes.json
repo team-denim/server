@@ -5,6 +5,26 @@
     "postID": 1
   },
   {
+    "userID": 1,
+    "tableID": 1,
+    "postID": 2
+  },
+  {
+    "userID": 1,
+    "tableID": 1,
+    "postID": 5
+  },
+  {
+    "userID": 1,
+    "tableID": 1,
+    "postID": 6
+  },
+  {
+    "userID": 1,
+    "tableID": 1,
+    "postID": 7
+  },
+  {
     "userID": 2,
     "tableID": 1,
     "postID": 1
@@ -13,6 +33,16 @@
     "userID": 2,
     "tableID": 1,
     "postID": 2
+  },
+  {
+    "userID": 2,
+    "tableID": 1,
+    "postID": 4
+  },
+  {
+    "userID": 2,
+    "tableID": 1,
+    "postID": 5
   },
   {
     "userID": 1,
@@ -28,5 +58,15 @@
     "userID": 3,
     "tableID": 3,
     "postID": 1
+  },
+  {
+    "userID": 3,
+    "tableID": 3,
+    "postID": 3
+  },
+  {
+    "userID": 3,
+    "tableID": 3,
+    "postID": 7
   }
 ]

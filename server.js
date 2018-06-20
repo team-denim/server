@@ -410,7 +410,7 @@ app.post('/api/saved', (req, res, next) => {
       table_id AS "tableID",
       post_id AS "postID"
   `,
-  [body.userID, body.tableID, body.postID, body.text])
+  [body.userID, body.tableID, body.postID])
     .then(result => {
       res.send(result.rows[0]);
     })
@@ -705,29 +705,37 @@ app.delete('/api/comments/:id', (req, res, next) => {
 
 
 
-// VOTE
+// VOTES
 
+//GET all upvotes by user, id = user_id
+app.get('/api/votes/:id', (req, res, next) => {
+  client.query(`
+    SELECT id,
+      post_id AS "postID",
+      user_id AS "userID"
+    FROM votes
+    WHERE user_id = $1;
+  `,
+  [req.params.id])
+    .then(result => {
+      res.send(result.rows);
+    })
+    .catch(next);
+});
+
+//POST a record of user's upvote
 app.post('/api/votes', (req, res, next) => {
   const body = req.body;
+
   client.query(`
-    SELECT count(*) FROM votes WHERE user_id = $1 AND table_id = $2 AND post_id = $3;
+    INSERT INTO votes (user_id, table_id, post_id)
+    VALUES ($1, $2, $3)
+    RETURNING
+      user_id AS "userID",
+      table_id AS "tableID",
+      post_id AS "postID";
   `,
   [body.userID, body.tableID, body.postID])
-    .then(result => {
-      if(result.rows[0].count > 0) {
-        throw new Error('You have already upvoted this post');
-      }
-
-      return client.query(`
-        INSERT INTO votes (user_id, table_id, post_id)
-        VALUES ($1, $2, $3)
-        RETURNING
-          user_id AS "userID",
-          table_id AS "tableID",
-          post_id AS "postID";
-      `,
-      [body.userID, body.tableID, body.postID]);
-    })
     .then(result => {
       const row = result.rows[0];
       res.send({
@@ -740,11 +748,11 @@ app.post('/api/votes', (req, res, next) => {
     .catch(next);
 });
 
+//DELETE upvote by vote primary key
 app.delete('/api/votes/:id', (req, res, next) => {
 
   client.query(`
     DELETE FROM votes
-
     WHERE id = $1;
   `,
   [req.params.id]

@@ -2,11 +2,36 @@
   {
     "authorID": 1,
     "title": "SLEEP!",
-    "text": "Get a good night's rest."
+    "text": "Get a good night's rest. It's really good for you."
   },
   {
     "authorID": 2,
     "title": "PURE PAIN",
     "text": "It's painful."
+  },
+  {
+    "authorID": 1,
+    "title": "Learn to meal prep",
+    "text": "It's a great way to eat better, save money, and provide good brain fuel."
+  },
+  {
+    "authorID": 2,
+    "title": "Coffee",
+    "text": "If it's before noon, be sure to make a new pot of coffee so others won't have to wait."
+  },
+  {
+    "authorID": 1,
+    "title": "LinkedIn Networking",
+    "text": "It's expected that you accept every request you get, apparently."
+  },
+  {
+    "authorID": 2,
+    "title": "Everything's a list.",
+    "text": "Use <ul> and <li> liberally."
+  },
+  {
+    "authorID": 3,
+    "title": "*sniff*",
+    "text": "arf arf woof"
   }
 ]
