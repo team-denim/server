@@ -270,12 +270,31 @@ app.get('/api/resources', (req, res, next) => {
     .catch(next);
 });
 
+app.get('/api/resources/categories', (req, res, next) => {
+
+  client.query(`
+    SELECT * FROM resource_categories;
+  `).then(result => {
+    res.send(result.rows);
+  })
+    .catch(next);
+});
+
 app.post('/api/resources', (req, res, next) => {
   const body = req.body;
   client.query(`
-    INSERT INTO resources (author_id, category_id, title, description, url)
+    INSERT INTO resources (
+      author_id,
+      category_id,
+      title,
+      description,
+      url
+    )
     VALUES ($1, $2, $3, $4, $5)
-    RETURNING *, author_id AS "authorID", category_id AS "categoryID";
+    RETURNING
+      *,
+      author_id AS "authorID",
+      category_id AS "categoryID";
   `,
   [body.authorID, body.categoryID, body.title, body.description, body.url])
     .then(result => {
@@ -730,6 +749,7 @@ app.delete('/api/comments/:id', (req, res, next) => {
 app.get('/api/votes/:id', (req, res, next) => {
   client.query(`
     SELECT id,
+      table_id AS "tableID",
       post_id AS "postID",
       user_id AS "userID"
     FROM votes
