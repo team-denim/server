@@ -669,6 +669,7 @@ app.post('/api/comments', (req, res, next) => {
     INSERT INTO comments (author_id, table_id, post_id, text)
     VALUES ($1, $2, $3, $4)
     RETURNING
+      id,
       author_id AS "authorID",
       table_id AS "tableID",
       post_id AS "postID",
