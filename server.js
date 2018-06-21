@@ -604,9 +604,9 @@ app.get('/api/comments/advice/:id', (req, res, next) => {
     SELECT 
       c.id,
       c.text,
-      c.author_id,
-      u.first_name,
-      u.last_name
+      c.author_id AS "authorID",
+      u.first_name AS "firstName",
+      u.last_name AS "lastName"
     FROM comments c
     JOIN users u
       ON u.id = c.author_id
@@ -625,9 +625,9 @@ app.get('/api/comments/resources/:id', (req, res, next) => {
     SELECT 
       c.id,
       c.text,
-      c.author_id,
-      u.first_name,
-      u.last_name
+      c.author_id AS "authorID",
+      u.first_name AS "firstName",
+      u.last_name AS "lastName"
     FROM comments c
     JOIN users u
       ON u.id = c.author_id
@@ -646,9 +646,9 @@ app.get('/api/comments/workspaces/:id', (req, res, next) => {
     SELECT 
       c.id,
       c.text,
-      c.author_id,
-      u.first_name,
-      u.last_name
+      c.author_id AS "authorID",
+      u.first_name AS "firstName",
+      u.last_name AS "lastName"
     FROM comments c
     JOIN users u
       ON u.id = c.author_id
