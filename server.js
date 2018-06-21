@@ -134,8 +134,8 @@ app.put('/api/users/:id', (req, res, next) => {
       last_name AS "lastName",
       email,
       linkedin,
-      github_profile AS githubProfile,
-      classwork_repo AS classworkRepo;
+      github_profile AS "githubProfile",
+      classwork_repo AS "classworkRepo";
   `,
   [body.firstName, body.lastName, body.email, body.linkedin, body.githubProfile, body.classworkRepo, req.params.id]
   ).then(result => {
