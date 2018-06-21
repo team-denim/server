@@ -745,15 +745,48 @@ app.delete('/api/comments/:id', (req, res, next) => {
 
 // VOTES
 
-//GET all upvotes by user, id = user_id
-app.get('/api/votes/:id', (req, res, next) => {
+//GET all ADVICE upvotes by user, id = user_id
+app.get('/api/votes/advice/:id', (req, res, next) => {
   client.query(`
     SELECT id,
       table_id AS "tableID",
       post_id AS "postID",
       user_id AS "userID"
     FROM votes
-    WHERE user_id = $1;
+    WHERE table_id = 1 AND user_id = $1;
+  `,
+  [req.params.id])
+    .then(result => {
+      res.send(result.rows);
+    })
+    .catch(next);
+});
+
+//GET all RESOURCES upvotes by user, id = user_id
+app.get('/api/votes/resources/:id', (req, res, next) => {
+  client.query(`
+    SELECT id,
+      table_id AS "tableID",
+      post_id AS "postID",
+      user_id AS "userID"
+    FROM votes
+    WHERE table_id = 2 AND user_id = $1;
+  `,
+  [req.params.id])
+    .then(result => {
+      res.send(result.rows);
+    })
+    .catch(next);
+});
+//GET all WORKSPACES upvotes by user, id = user_id
+app.get('/api/votes/workspaces/:id', (req, res, next) => {
+  client.query(`
+    SELECT id,
+      table_id AS "tableID",
+      post_id AS "postID",
+      user_id AS "userID"
+    FROM votes
+    WHERE table_id = 3 AND user_id = $1;
   `,
   [req.params.id])
     .then(result => {
