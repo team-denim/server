@@ -747,6 +747,7 @@ app.post('/api/votes', (req, res, next) => {
     INSERT INTO votes (user_id, table_id, post_id)
     VALUES ($1, $2, $3)
     RETURNING
+      id,
       user_id AS "userID",
       table_id AS "tableID",
       post_id AS "postID";
