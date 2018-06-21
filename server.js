@@ -98,8 +98,10 @@ app.get('/api/users/:id', (req, res, next) => {
 
   client.query(`
     SELECT
+      id,
       first_name as "firstName",
       last_name as "lastName",
+      email,
       linkedin,
       github_profile as "githubProfile",
       classwork_repo as "classworkRepo"
@@ -127,8 +129,9 @@ app.put('/api/users/:id', (req, res, next) => {
       classwork_repo = $6
     WHERE id = $7
     RETURNING 
-      first_name AS firstName,
-      last_name AS lastName,
+      id,
+      first_name AS "firstName",
+      last_name AS "lastName",
       email,
       linkedin,
       github_profile AS githubProfile,
