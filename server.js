@@ -604,7 +604,7 @@ app.delete('/api/saved/:id', (req, res, next) => {
 //GET a count of how many comments on each post for a specific table
 app.get('/api/comments/:id', (req, res, next) => {
   client.query(`
-    SELECT c.post_id,
+    SELECT c.post_id AS "postID",
       count(c.post_id) AS "commentCount"
     FROM comments c
     WHERE table_id = $1
