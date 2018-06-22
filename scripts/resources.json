@@ -3,14 +3,14 @@
     "authorID": 3,
     "categoryID": 4,
     "title": "MDN",
-    "description": "great resource for documentation",
+    "description": "This is a great resource for documentation in almost all the languages you'll be covering.",
     "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript"
   },
   {
     "authorID": 1,
     "categoryID": 1,
     "title": "CSS Grid",
-    "description": "Visual guide to css grid",
+    "description": "I reference this guide all the time. I like that it has visual representations of what you're doing in grid.",
     "url": "https://css-tricks.com/snippets/css/complete-guide-grid/"
   }
 ]
