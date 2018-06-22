@@ -4,14 +4,15 @@
     "title": "Life of Riley",
     "workspaceType": "Bar",
     "address": "300 NW 10th Ave.",
-    "description": "Sometimes you just want one beer...",
-    "url": "lifeofriley.com"
+    "description": "The upstairs is a well-lit spacious area for coding, beer, and wi-fi. Their happy hour is from 4-7 with 50cent wings!",
+    "url": "https://www.lifeofrileyportland.com/"
   },
   {
     "authorID": 1,
-    "title": "Nola Doughnuts",
+    "title": "NOLA Doughnuts",
     "workspaceType": "Cafe",
     "address": "110 NW 10th Ave.",
-    "description": "Spacious, quiet, delicious fluffy doughnuts."
+    "description": "Spacious, quiet, and some delicious fluffy doughnuts. They make a dang good white chocolate mocha, too!",
+    "url": "http://www.noladoughnuts.com/"
   }
 ]

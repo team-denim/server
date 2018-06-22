@@ -3,30 +3,43 @@
     "authorID": 2,
     "tableID": 1,
     "postID": 1,
-    "text": "Yes, sleep is important."
+    "text": "What's the minimum number of hours of sleep that you'll need?"
   },
   {
     "authorID": 1,
     "tableID": 1,
-    "postID": 2,
+    "postID": 1,
+    "text": "I try to get at least 6."
+  },
+  {
+    "authorID": 1,
+    "tableID": 1,
+    "postID": 4,
     "text": "luv it"
   },
   {
     "authorID": 3,
     "tableID": 1,
-    "postID": 2,
+    "postID": 4,
     "text": "woof woof"
   },
   {
     "authorID": 1,
     "tableID": 1,
-    "postID": 2,
+    "postID": 4,
     "text": "What's that, lewis?"
   },
   {
     "authorID": 2,
     "tableID": 1,
-    "postID": 2,
-    "text": "Good dog."
+    "postID": 4,
+    "text": "I think he said 'Don't touch me.'"
+  },
+  {
+    "authorID": 1,
+    "tableID": 3,
+    "postID": 1,
+    "text": "Sometimes I go for 1 beer... next thing you know it's 11pm and I'm 4 beers in."
   }
+  
 ]

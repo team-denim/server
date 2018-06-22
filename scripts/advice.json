@@ -2,17 +2,12 @@
   {
     "authorID": 1,
     "title": "SLEEP!",
-    "text": "Get a good night's rest. It's really good for you."
-  },
-  {
-    "authorID": 2,
-    "title": "PURE PAIN",
-    "text": "It's painful."
+    "text": "Getting a good night's rest is crucial for your brain to store into long term memory the concepts you learned that day. That's why sometimes you won't understand something until you wake up the next day."
   },
   {
     "authorID": 1,
-    "title": "Learn to meal prep",
-    "text": "It's a great way to eat better, save money, and provide good brain fuel."
+    "title": "Meal Prep",
+    "text": "Learning to meal prep is a great way to eat better, save money, and provide high-quality brain fuel."
   },
   {
     "authorID": 2,
@@ -20,18 +15,8 @@
     "text": "If it's before noon, be sure to make a new pot of coffee so others won't have to wait."
   },
   {
-    "authorID": 1,
-    "title": "LinkedIn Networking",
-    "text": "It's expected that you accept every request you get, apparently."
-  },
-  {
-    "authorID": 2,
-    "title": "Everything's a list.",
-    "text": "Use <ul> and <li> liberally."
-  },
-  {
     "authorID": 3,
     "title": "*sniff*",
-    "text": "arf arf woof"
+    "text": "awrf arf woof"
   }
 ]
